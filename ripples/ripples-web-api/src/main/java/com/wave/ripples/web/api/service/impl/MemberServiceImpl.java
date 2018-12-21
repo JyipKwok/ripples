@@ -5,6 +5,7 @@ import com.wave.ripples.web.api.mapper.MemberMapper;
 import com.wave.ripples.web.api.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 /**
  * 会员 业务逻辑处理 实现类
@@ -22,17 +23,28 @@ public class MemberServiceImpl implements MemberService {
     private MemberMapper memberMapper;
 
     /**
-     * 根据登录 id 查找实例
+     * 登录
      *
      * @param loginId
      * @return
      */
     @Override
-    public Member getByLoginId(String loginId) {
+    public Member login(String loginId, String password) {
         Member loginMember = new Member();
         loginMember.setMembername(loginId);
         loginMember.setEmail(loginId);
         loginMember.setPhone(loginId);
-        return memberMapper.getByLoginId(loginMember);
+
+        Member member = memberMapper.login(loginMember);
+        if (member != null) {
+            // 将明文密码加密
+            String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+            // 输入的密码加密后与查找到的会员密码相同则返回会员实例
+            if (member.getPassword().equals(md5Password)) {
+                return member;
+            }
+        }
+        // 密码不匹配返回空
+        return null;
     }
 }

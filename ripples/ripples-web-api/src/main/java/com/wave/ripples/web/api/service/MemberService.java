@@ -18,5 +18,5 @@ public interface MemberService {
      * @param loginId
      * @return
      */
-    Member getByLoginId(String loginId);
+    Member login(String loginId, String password);
 }

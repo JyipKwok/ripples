@@ -1,8 +1,13 @@
 package com.wave.ripples.web.ui.api;
 
+import com.wave.ripples.commons.dto.BaseResult;
 import com.wave.ripples.commons.utils.HttpClientUtils;
 import com.wave.ripples.commons.utils.MapperUtils;
 import com.wave.ripples.web.ui.dto.Member;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -16,19 +21,19 @@ import com.wave.ripples.web.ui.dto.Member;
  */
 public class MemberApi {
     /**
-     * 根据登录 id 查找实例
+     * 登录
      *
      * @param loginId
+     * @param password
      * @return
      */
-    public static Member findMemberByLoginId(String loginId) {
-        String result = HttpClientUtils.doGet(API.API_MEMBER + loginId);
-        Member member = null;
-        try {
-            member = MapperUtils.json2pojoByTree(result, "data", Member.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static Member login(String loginId, String password) throws Exception {
+        // 设置请求的参数
+        List<BasicNameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("loginId", loginId));
+        params.add(new BasicNameValuePair("password", password));
+        String json = HttpClientUtils.doPost(API.API_MEMBER, params.toArray(new BasicNameValuePair[params.size()]));
+        Member member = MapperUtils.json2pojoByTree(json, "data", Member.class);
         return member;
     }
 }

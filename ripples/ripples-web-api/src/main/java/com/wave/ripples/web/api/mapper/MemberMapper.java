@@ -20,5 +20,5 @@ public interface MemberMapper {
      * @param member
      * @return
      */
-    Member getByLoginId(Member member);
+    Member login(Member member);
 }

@@ -32,13 +32,17 @@ public class MemberController {
      * @param loginId
      * @return
      */
-    @GetMapping(value = "{login_id}")
-    public BaseResult getByLoginId(@PathVariable(value = "login_id") String loginId) {
+    @PostMapping(value = "login")
+    public BaseResult login(String loginId, String password) {
         MemberDto memberDto = new MemberDto();
-        Member byLoginIdMember = memberService.getByLoginId(loginId);
-        if (byLoginIdMember != null) {
-            BeanUtils.copyProperties(byLoginIdMember, memberDto);
+        Member byLoginIdMember = memberService.login(loginId, password);
+        if (byLoginIdMember == null) {
+            return BaseResult.fail("用户名或密码不正确！");
         }
-        return BaseResult.success("成功", memberDto);
+        //
+        else {
+            BeanUtils.copyProperties(byLoginIdMember, memberDto);
+            return BaseResult.success("成功", memberDto);
+        }
     }
 }

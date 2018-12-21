@@ -49,6 +49,14 @@ public class BaseResult implements Serializable {
         return BaseResult.createResult(status, message, null);
     }
 
+    /**
+     * 创建结果集
+     *
+     * @param status
+     * @param message
+     * @param data
+     * @return
+     */
     private static BaseResult createResult(int status, String message, Object data) {
         BaseResult baseResult = new BaseResult();
         baseResult.setStatus(status);
